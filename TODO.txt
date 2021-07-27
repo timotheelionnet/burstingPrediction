@@ -1,0 +1,11 @@
+To do:
+
+Update cutoffAndNormalization;
+
+Add training steps
+
+Test training on distance matrix vs interaction matrix
+
+Compute relative error on each TF - does it depend on the # of interactions?
+
+Add gating by expression levels in HeLa?
