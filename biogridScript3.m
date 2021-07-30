@@ -12,6 +12,9 @@ burstingDataFileName = 'burstingData.txt';
 % downloaded as txt format from http://humantfs.ccbr.utoronto.ca/download.php
 humanTFDataBaseFileName = 'DatabaseExtract_v_1.01.txt';
 
+% 4) RNA-seq data for HeLa cell line, from
+RNAseqFileName = "hela_RNAseq.xlsx";
+
 tic
 %% load the list of interactions between all TFs
 geneSymbolToDisplay1 = 'EP300';   % a first arbitrary gene for which the stats 
@@ -53,6 +56,11 @@ minInteractionsPerInteractor = 0;
     minInteractionsPerTF,minInteractionsPerInteractor);
 
 distM2 = distM(isInteractorInBothLists,isInteractorInBothLists);
+
+%% load Hela RNA-seq data
+expressionThreshold = 0.1;
+[M3,intList3,RNAseq] = readHelaRNASeq(RNAseqFileName,intList2,expressionThreshold, M2);
+
 %% plot stats
 threshMax = 200; % the following function will plot the number of 
                     % interactions/interactors as a function of the minimum
