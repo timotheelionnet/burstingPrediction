@@ -46,8 +46,11 @@ setSelfInteractionMode = 'max'; % this setting sets the number of evidence of a 
 
 %% Keep only interactors that interact with both a characterized TF and a non-characterized TF
 % this is needed for the training
-[M2,intList2,isInteractorInBothLists] = ...
-    pruneInteractionMatrixForTraining(M,intList,tfList,burstingData); 
+minInteractionsPerTF = 1;
+minInteractionsPerInteractor = 0;
+[M2,intList2,isInteractorInBothLists,tfList2,lonelyTFs,~] = ...
+    pruneInteractionMatrixForTraining(M,intList,tfList,burstingData,...
+    minInteractionsPerTF,minInteractionsPerInteractor);
 
 distM2 = distM(isInteractorInBothLists,isInteractorInBothLists);
 %% plot stats
@@ -55,21 +58,20 @@ threshMax = 200; % the following function will plot the number of
                     % interactions/interactors as a function of the minimum
                     % number of unique interactions per interactors, for a range
                     % of 1 to threshMax
-threshInteractions = dispInteractions(M2,burstingData, tfList,intList2,threshMax,...
+threshInteractions = dispInteractions(M2,burstingData, tfList2,intList2,threshMax,...
     geneSymbolToDisplay1,geneSymbolToDisplay2);
 
-%% truncate interactor list by setting a threshold number of interactions
-minInteractions = 30;
-[M2,intList2] = cutoffAndNormalizeInteractionsMatrix(M,intList,minInteractions);
+%% normalize interaction matrix
+M3 = normalizeInteractionsMatrix(M2);
 
 %% cluster interaction matrix
 
 cg = clustergram(M2(sum(M'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
-    'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList(sum(M'>0)>30),...
+    'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M'>0)>30),...
     'ColumnLabels',intList2);
 %%
 cg = clustergram(M2,'Colormap',redbluecmap,'DisplayRange',10,...
-    'Symmetric',false,'Rowlabels',tfList,...
+    'Symmetric',false,'Rowlabels',tfList2,...
     'ColumnLabels',intList2);
 %%
 % cg = clustergram(M,'Colormap',redbluecmap,'DisplayRange',10,...

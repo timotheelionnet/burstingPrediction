@@ -1,0 +1,20 @@
+%readHelaRNASeq(RNAseqFileName,intList,expressionThreshold)
+
+RNAseq = readtable(RNAseqFileName);
+%%
+isInIntList = ismember(RNAseq.Gene_name,intList2);
+
+rnaLevels = RNAseq.pTPM(isInIntList);
+
+[n,x] = hist(log(rnaLevels+1),0:.1:10);
+figure('Name','Expression levels in Hela');
+plot(x,n);
+xlabel('log(pTPM+1)');
+ylabel('Counts');
+
+%%
+expressedGenes = RNAseq.Gene_name(log(RNAseq.pTPM+1) >= expressionThreshold);
+
+%%
+
+expressedGenesIdx = ismember()
