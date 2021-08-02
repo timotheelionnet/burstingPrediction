@@ -1,5 +1,5 @@
 %% prerequisites
-
+figOpt = 0;
 % 1) BIOGRID database file: we used the .tab3 formatted file from 
 % https://downloads.thebiogrid.org/BioGRID/Release-Archive/BIOGRID-4.4.199/
 % set name of the downladed file here:
@@ -50,7 +50,7 @@ setSelfInteractionMode = 'max'; % this setting sets the number of evidence of a 
 %% Keep only interactors that interact with both a characterized TF and a non-characterized TF
 % this is needed for the training
 minInteractionsPerTF = 1;
-minInteractionsPerInteractor = 0;
+minInteractionsPerInteractor = 5;
 [M2,intList2,isInteractorInBothLists,tfList2,lonelyTFs,~] = ...
     pruneInteractionMatrixForTraining(M,intList,tfList,burstingData,...
     minInteractionsPerTF,minInteractionsPerInteractor);
@@ -62,20 +62,21 @@ expressionThreshold = 0.1;
 [M3,intList3,RNAseq] = readHelaRNASeq(RNAseqFileName,intList2,expressionThreshold, M2);
 
 %% plot stats
+if figOpt == 1
 threshMax = 200; % the following function will plot the number of 
                     % interactions/interactors as a function of the minimum
                     % number of unique interactions per interactors, for a range
                     % of 1 to threshMax
 threshInteractions = dispInteractions(M3,burstingData, tfList2,intList3,threshMax,...
     geneSymbolToDisplay1,geneSymbolToDisplay2);
-
+end
 %% normalize interaction matrix
 normByRows = 1;
 normByCols = 1;
 M3norm = normalizeInteractionsMatrix(M3,normByRows,normByCols);
 
 %% cluster interaction matrix
-
+if figOpt == 1
 cg1 = clustergram(M3(sum(M2'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
     'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M2'>0)>30),...
     'ColumnLabels',intList3);
@@ -83,8 +84,8 @@ cg1 = clustergram(M3(sum(M2'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,.
 cg2 = clustergram(M3,'Colormap',redbluecmap,'DisplayRange',10,...
     'Symmetric',false,'Rowlabels',tfList2,...
     'ColumnLabels',intList3);
-%%
 c1 = clusterGroup(cg2,501,1);
+end
 %% Find indices of characterized TFs in list of all TFs and subset burstingData for training
 [charTFind, burstingData2] = findCharTFind(charTFs, tfList2, burstingData);
 
