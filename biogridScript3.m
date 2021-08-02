@@ -19,7 +19,7 @@ tic
 %% load the list of interactions between all TFs
 geneSymbolToDisplay1 = 'EP300';   % a first arbitrary gene for which the stats 
                                 % will be displayed in the command line.
-geneSymbolToDisplay2 = 'CDK9';   % a second arbitrary gene for which the stats 
+geneSymbolToDisplay2 = 'BRD4';   % a second arbitrary gene for which the stats 
                                 % will be displayed in the command line.
 bgData = readBioGridFile(bioGridFileName,geneSymbolToDisplay1);
 
@@ -36,7 +36,7 @@ disp(['Loaded bursting data from ',...
 tfDB = readtable(humanTFDataBaseFileName);
 
 %% keep only interactors that interact with one of the TFs 
-[bgDataClean,tfList] = ...
+[bgDataClean,tfList,charTFs] = ...
     pruneInteractionList3(bgData,tfDB,burstingData);
 
 %% create interaction matrix
@@ -70,28 +70,34 @@ threshInteractions = dispInteractions(M3,burstingData, tfList2,intList3,threshMa
     geneSymbolToDisplay1,geneSymbolToDisplay2);
 
 %% normalize interaction matrix
-M3norm = normalizeInteractionsMatrix(M3,1,1);
+normByRows = 1;
+normByCols = 1;
+M3norm = normalizeInteractionsMatrix(M3,normByRows,normByCols);
 
 %% cluster interaction matrix
 
-cg = clustergram(M3(sum(M2'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
+cg1 = clustergram(M3(sum(M2'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
     'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M2'>0)>30),...
     'ColumnLabels',intList3);
 %%
-cg = clustergram(M3,'Colormap',redbluecmap,'DisplayRange',10,...
+cg2 = clustergram(M3,'Colormap',redbluecmap,'DisplayRange',10,...
     'Symmetric',false,'Rowlabels',tfList2,...
     'ColumnLabels',intList3);
 %%
-% cg = clustergram(M,'Colormap',redbluecmap,'DisplayRange',10,...
-%     'Symmetric',false,'Rowlabels',tfList,...
-%     'ColumnLabels',intList);
-%%
-%c1 = clusterGroup(cg,501,1);
-%%
-%charTF_IntList_from_allTF_IntList;
+c1 = clusterGroup(cg2,501,1);
+%% Find indices of characterized TFs in list of all TFs and subset burstingData for training
+[charTFind, burstingData2] = findCharTFind(charTFs, tfList2, burstingData);
 
-%% 
-%charTF_train_allTF_predict;
+%% Train and predict
+%Threshold setting is the minimum number an interactor must make to be included in the prediction
+%Insert interaction threshold for Activity here
+A = 30;
+%Insert interaction threshold for Intensity here
+I = 15;
+[predScores,betaTrainAct,betaTrainInt] = updatingModelwip ...
+    (M3,M3norm,tfList2,charTFind,burstingData2,A,I);
 
+%% Plot predictions
+plotPredictions(M3,predScores,burstingData2,tfList2,charTFind,A,I)
 %% 
 toc   

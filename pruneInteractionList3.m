@@ -1,4 +1,4 @@
-function [bgData,tfList] = pruneInteractionList3(bgData,tfDB,burstingData)
+function [bgData,tfList,charTFs] = pruneInteractionList3(bgData,tfDB,burstingData)
 
 %% keep only interactions where at least one partner is a TF
 
