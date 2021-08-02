@@ -50,7 +50,7 @@ setSelfInteractionMode = 'max'; % this setting sets the number of evidence of a 
 %% Keep only interactors that interact with both a characterized TF and a non-characterized TF
 % this is needed for the training
 minInteractionsPerTF = 1;
-minInteractionsPerInteractor = 5;
+minInteractionsPerInteractor = 1;
 [M2,intList2,isInteractorInBothLists,tfList2,lonelyTFs,~] = ...
     pruneInteractionMatrixForTraining(M,intList,tfList,burstingData,...
     minInteractionsPerTF,minInteractionsPerInteractor);
