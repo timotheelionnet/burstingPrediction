@@ -19,7 +19,7 @@ tic
 %% load the list of interactions between all TFs
 geneSymbolToDisplay1 = 'EP300';   % a first arbitrary gene for which the stats 
                                 % will be displayed in the command line.
-geneSymbolToDisplay2 = 'BRD4';   % a second arbitrary gene for which the stats 
+geneSymbolToDisplay2 = 'CDK9';   % a second arbitrary gene for which the stats 
                                 % will be displayed in the command line.
 bgData = readBioGridFile(bioGridFileName,geneSymbolToDisplay1);
 
@@ -66,21 +66,21 @@ threshMax = 200; % the following function will plot the number of
                     % interactions/interactors as a function of the minimum
                     % number of unique interactions per interactors, for a range
                     % of 1 to threshMax
-threshInteractions = dispInteractions(M2,burstingData, tfList2,intList2,threshMax,...
+threshInteractions = dispInteractions(M3,burstingData, tfList2,intList3,threshMax,...
     geneSymbolToDisplay1,geneSymbolToDisplay2);
 
 %% normalize interaction matrix
-M3 = normalizeInteractionsMatrix(M2);
+M3norm = normalizeInteractionsMatrix(M3,1,1);
 
 %% cluster interaction matrix
 
-cg = clustergram(M2(sum(M'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
-    'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M'>0)>30),...
-    'ColumnLabels',intList2);
+cg = clustergram(M3(sum(M2'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
+    'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M2'>0)>30),...
+    'ColumnLabels',intList3);
 %%
-cg = clustergram(M2,'Colormap',redbluecmap,'DisplayRange',10,...
+cg = clustergram(M3,'Colormap',redbluecmap,'DisplayRange',10,...
     'Symmetric',false,'Rowlabels',tfList2,...
-    'ColumnLabels',intList2);
+    'ColumnLabels',intList3);
 %%
 % cg = clustergram(M,'Colormap',redbluecmap,'DisplayRange',10,...
 %     'Symmetric',false,'Rowlabels',tfList,...
