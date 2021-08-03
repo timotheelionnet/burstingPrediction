@@ -1,6 +1,7 @@
 function plotPredictions(M,predScores,burstingData,tfList,charTFind,A,I)
 InteractionIndexStoreAct = find(sum(M)>=A);
 InteractionIndexStoreInt = find(sum(M)>=I);
+predictIndex = setdiff(1:numel(tfList),charTFind);
 figure;
 
 scatter(predScores(:,1),predScores(:,2), 'filled', 'MarkerFaceAlpha', 0.2, ...
@@ -15,9 +16,9 @@ scatter(burstingData.activity, burstingData.intensity,'filled','MarkerFaceAlpha'
 labelpoints(burstingData.activity,burstingData.intensity, tfList(charTFind), 'N', 0.01); hold on;
 
 predScores = sortrows(predScores,1,'descend');
-labelpoints(predScores(1:20,1),predScores(1:20,2),tfList(predScores(1:20,3)),'N',0.01); hold on;
+labelpoints(predScores(1:20,1),predScores(1:20,2),tfList(predictIndex(predScores(1:20,3))),'N',0.01); hold on;
 predScores = sortrows(predScores,2,'descend');
-labelpoints(predScores(1:20,1),predScores(1:20,2),tfList(predScores(1:20,3)),'N',0.01); hold on;
+labelpoints(predScores(1:20,1),predScores(1:20,2),tfList(predictIndex(predScores(1:20,3))),'N',0.01); hold on;
 
 xlabel(['Predicted Activity Effect with ' num2str(numel(InteractionIndexStoreAct)) ' interactors']);
 ylabel(['Predicted Intensity Effect with ' num2str(numel(InteractionIndexStoreInt)) ' interactors']);
