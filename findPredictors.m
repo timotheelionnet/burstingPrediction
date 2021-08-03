@@ -4,7 +4,7 @@ summation = sum(M);
 
 betas_act = betaTrainAct;
 betas_act(1,:) = [];
-betas_act(:,2) = 1:numel(betas_ act);
+betas_act(:,2) = 1:numel(betas_act);
 betas_act = sortrows(betas_act,'descend');
 actSum = find(summation>=A);
 topPredictors_activity = intList(actSum(betas_act(1:100,2)));
