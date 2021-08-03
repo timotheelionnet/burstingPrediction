@@ -19,7 +19,7 @@ intList2 = intList(isInteractorInBothLists);
 %% remove interactors that have fewer than minInteractionsPerInteractor
 hasInteractorEnoughInteractions = sum(M2) >= minInteractionsPerInteractor;
 discardedInts = intList2(~hasInteractorEnoughInteractions);
-M2 = M(:,hasInteractorEnoughInteractions);
+M2 = M2(:,hasInteractorEnoughInteractions);
 intList2 = intList2(hasInteractorEnoughInteractions);
 
 %% remove TFs that do not have any interactors (or fewer interactors than minInteractionsPerTF)

@@ -1,5 +1,5 @@
 %% prerequisites
-figOpt = 0;
+figOpt = 1;
 % 1) BIOGRID database file: we used the .tab3 formatted file from 
 % https://downloads.thebiogrid.org/BioGRID/Release-Archive/BIOGRID-4.4.199/
 % set name of the downladed file here:
@@ -77,11 +77,11 @@ M3norm = normalizeInteractionsMatrix(M3,normByRows,normByCols);
 
 %% cluster interaction matrix
 if figOpt == 1
-cg1 = clustergram(M3(sum(M2'>0)>30,:),'Colormap',redbluecmap,'DisplayRange',10,...
-    'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M2'>0)>30),...
+cg1 = clustergram(M3norm(sum(M3'>0)>10,:),'Colormap',redbluecmap,'DisplayRange',10,...
+    'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M3'>0)>10),...
     'ColumnLabels',intList3);
 %%
-cg2 = clustergram(M3,'Colormap',redbluecmap,'DisplayRange',10,...
+cg2 = clustergram(M3norm,'Colormap',redbluecmap,'DisplayRange',10,...
     'Symmetric',false,'Rowlabels',tfList2,...
     'ColumnLabels',intList3);
 c1 = clusterGroup(cg2,501,1);
@@ -92,13 +92,18 @@ end
 %% Train and predict
 %Threshold setting is the minimum number an interactor must make to be included in the prediction
 %Insert interaction threshold for Activity here
-A = 30;
+A = 60;
 %Insert interaction threshold for Intensity here
-I = 15;
+I = 25;
 [predScores,betaTrainAct,betaTrainInt] = updatingModelwip ...
     (M3,M3norm,tfList2,charTFind,burstingData2,A,I);
 
 %% Plot predictions
 plotPredictions(M3,predScores,burstingData2,tfList2,charTFind,A,I)
-%% 
+
+%% Find top predictors using beta values calculated by model 
+[topPredictors_activity, topPredictors_intensity] ...
+    = findPredictors(betaTrainAct, betaTrainInt, M3, intList3, A, I);
+
+%%
 toc   
