@@ -1,5 +1,10 @@
 %% prerequisites
+<<<<<<< Updated upstream:biogridScript3.m
 figOpt = 1;
+=======
+figOpt = 0;
+
+>>>>>>> Stashed changes:biogridScript4.m
 % 1) BIOGRID database file: we used the .tab3 formatted file from 
 % https://downloads.thebiogrid.org/BioGRID/Release-Archive/BIOGRID-4.4.199/
 % set name of the downladed file here:
@@ -44,30 +49,38 @@ setSelfInteractionMode = 'max'; % this setting sets the number of evidence of a 
                                     % to the maximum number of evidence
                                     % that TF has for any factor
 
-[M, intList,g,distM] = interactionMatrixMaker4(...
-                    bgDataClean,tfList,setSelfInteractionMode);
+[M, tf,g,distM] = interactionMatrixMaker5(...
+                    bgDataClean,tfList,charTFs,setSelfInteractionMode);
 
 %% Keep only interactors that interact with both a characterized TF and a non-characterized TF
 % this is needed for the training
 minInteractionsPerTF = 1;
 minInteractionsPerInteractor = 1;
-[M2,intList2,isInteractorInBothLists,tfList2,lonelyTFs,~] = ...
-    pruneInteractionMatrixForTraining(M,intList,tfList,burstingData,...
+tf2 = pruneInteractionMatrixForTraining2(M,tf,...
     minInteractionsPerTF,minInteractionsPerInteractor);
-
-distM2 = distM(isInteractorInBothLists,isInteractorInBothLists);
 
 %% load Hela RNA-seq data
 expressionThreshold = 0.1;
-[M3,intList3,RNAseq] = readHelaRNASeq(RNAseqFileName,intList2,expressionThreshold, M2);
+[tf3,RNAseq] = readHelaRNASeq2(RNAseqFileName,tf2,expressionThreshold);
+
+if figOpt == 1
+    [n1,x1] = hist(log(RNAseq.pTPM+1),0:.1:10);
+    figure('Name',['Expression levels in Hela, threshold set to ',num2str(expressionThreshold)]);
+    hold;
+    plot(x1,n1/sum(n1),'DisplayName','All genes');
+    [n2,x2] = hist(log(RNAseq.pTPM(ismember(RNAseq.Gene_name,intList))+1),0:.1:10);
+    plot(x2,n2/sum(n2),'DisplayName','Interactors');
+    xlabel('log(pTPM+1)');
+    ylabel('Counts');
+end
 
 %% plot stats
 if figOpt == 1
-threshMax = 200; % the following function will plot the number of 
+    threshMax = 200; % the following function will plot the number of 
                     % interactions/interactors as a function of the minimum
                     % number of unique interactions per interactors, for a range
                     % of 1 to threshMax
-threshInteractions = dispInteractions(M3,burstingData, tfList2,intList3,threshMax,...
+    threshInteractions = dispInteractions2(M,burstingData, tf3,threshMax,...
     geneSymbolToDisplay1,geneSymbolToDisplay2);
 end
 %% normalize interaction matrix
@@ -76,7 +89,9 @@ normByCols = 1;
 M3norm = normalizeInteractionsMatrix(M3,normByRows,normByCols);
 
 %% cluster interaction matrix
+dendrogramInteractionThreshold = 50;
 if figOpt == 1
+<<<<<<< Updated upstream:biogridScript3.m
 cg1 = clustergram(M3norm(sum(M3'>0)>10,:),'Colormap',redbluecmap,'DisplayRange',10,...
     'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M3'>0)>10),...
     'ColumnLabels',intList3);
@@ -85,6 +100,16 @@ cg2 = clustergram(M3norm,'Colormap',redbluecmap,'DisplayRange',10,...
     'Symmetric',false,'Rowlabels',tfList2,...
     'ColumnLabels',intList3);
 c1 = clusterGroup(cg2,501,1);
+=======
+    cg1 = clustergram(M3norm(sum(M3'>0)>dendrogramInteractionThreshold,:),'Colormap',redbluecmap,'DisplayRange',10,...
+        'RowPDist','correlation','Symmetric',false,'Rowlabels',tfList2(sum(M3'>0)>dendrogramInteractionThreshold),...
+        'ColumnLabels',intList3);
+    
+%     cg2 = clustergram(M3,'Colormap',redbluecmap,'DisplayRange',10,...
+%         'Symmetric',false,'Rowlabels',tfList2,...
+%         'ColumnLabels',intList3);
+%     c1 = clusterGroup(cg2,501,1);
+>>>>>>> Stashed changes:biogridScript4.m
 end
 %% Find indices of characterized TFs in list of all TFs and subset burstingData for training
 [charTFind, burstingData2] = findCharTFind(charTFs, tfList2, burstingData);
