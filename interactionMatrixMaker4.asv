@@ -45,20 +45,12 @@ switch setSelfInteractionMode
             if M(i,idx) == 0
                 M(i,idx) = 1;
             end
-            
-            if sum( (g(:,1) == idx) & (g(:,2) == idx)) == 0
-                g = [g;idx,idx];
-            end
         end
     case 'max'
         for idx = 1:numel(intList)   
             % fill in A x A interactions with ones
             i = find(ismember(tfList, intList(idx)));
             M(i,idx) = max(M(i,:));
-            
-            if sum( (g(:,1) == idx) & (g(:,2) == idx)) == 0
-                g = [g;idx,idx];
-            end
         end
 end
 
@@ -70,9 +62,6 @@ idx = sum(M)~=0;
 M = M(:,idx);
 intList = intList(idx);
 
-%% construct graph object
-g = g(prod(g,2)~=0,:);
-g = graph(g(:,1),g(:,2));
-distM = distances(g);
+%% construct graph
 
 end
