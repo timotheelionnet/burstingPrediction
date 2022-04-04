@@ -15,6 +15,8 @@ humanTFDataBaseFileName = 'DatabaseExtract_v_1.01.txt';
 % 4) RNA-seq data for HeLa cell line, from
 RNAseqFileName = "hela_RNAseq.xlsx";
 
+addpath('labelpoints.m');
+
 tic
 %% load the list of interactions between all TFs
 geneSymbolToDisplay1 = 'KLF4';   % a first arbitrary gene for which the stats
