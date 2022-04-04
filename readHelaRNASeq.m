@@ -1,11 +1,11 @@
-function [M,intList,RNAseq] = readHelaRNASeq(RNAseqFileName,intList,expressionThreshold, M)
+function [M,intList,RNAseq] = readHelaRNASeq(RNAseqFileName,intList,expressionThreshold, M, figOpt)
 
 RNAseq = readtable(RNAseqFileName);
 %%
 %isInIntList = ismember(RNAseq.Gene_name,intList);
 
 %rnaLevels = RNAseq.pTPM(isInIntList);
-
+if figOpt == 1
 [n1,x1] = hist(log(RNAseq.pTPM+1),0:.1:10);
 figure('Name',['Expression levels in Hela, threshold set to ',num2str(expressionThreshold)]);
 hold;
@@ -14,7 +14,7 @@ plot(x1,n1/sum(n1),'DisplayName','All genes');
 plot(x2,n2/sum(n2),'DisplayName','Interactors');
 xlabel('log(pTPM+1)');
 ylabel('Counts');
-
+end
 %%
 % better to select non expressed genes because some of the gene names in the
 % interactor dataset aren't present in the HeLa gene list so indexing by
