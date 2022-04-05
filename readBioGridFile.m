@@ -1,12 +1,8 @@
-function bgData = readBioGridFile(fname,geneSymbolToDisplay)
+function bgData = readBioGridFile(fname)
 % from a tab3 format BIOGRID download file (fname is the path to that file)
 % this function collects all *physical* interactions between *human proteins*, 
 % outputs the result as a 2 column list where the first column is the gene
 % symbol of the bait, the second column is the gene symbol of the hit.
-
-% geneSymbolToDisplay is one gene for which the stats (# of interactions as bait/hit or either)
-% are displayed as a QC.
-
 
 % read first line to get the header names
 fid = fopen(fname);

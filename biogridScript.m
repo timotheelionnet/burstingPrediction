@@ -25,7 +25,7 @@ geneSymbolToDisplay1 = 'KLF4';   % a first arbitrary gene for which the stats
 geneSymbolToDisplay2 = 'GATA1';   % a second arbitrary gene for which the stats
 % will be displayed in the command line.
 
-bgData = readBioGridFile(bioGridFileName,geneSymbolToDisplay1);
+bgData = readBioGridFile(bioGridFileName);
 
 displayBioGridStatsForGeneOfInterest(geneSymbolToDisplay1,bgData);
 displayBioGridStatsForGeneOfInterest(geneSymbolToDisplay2,bgData);
@@ -176,10 +176,17 @@ plotPredictions(RollingScores{threshIndex,2},burstingData2,tfList2,...
 %% Find interactor genes that are top predictors using beta values calculated by model
 
 [topPredictorsActivity, topPredictorsIntensity] ...
-    = findPredictors(...
-    betaTrainAct{threshIndex}, betaTrainInt{threshIndex},...
-    M3, intList3, ...
-    minInteractionsA(threshIndex), minInteractionsI(threshIndex));
+    = findPredictors(betaTrainAct{threshIndex}, betaTrainInt{threshIndex},...
+    M3, intList3, minInteractionsA(threshIndex), minInteractionsI(threshIndex));
 
-%%
+%% evaluate correlation between model predictions and measured data as a function of sample size
+itnum = 100;
+minInteractionsA=240;
+minInteractionsI=30;
+trainingFraction = 10:10:80;
+
+[PLScorrAF,PLScorrInt,W0AF,W0Int] = PLS_regression_split_train_and_predict(...
+    burstingData2,trainingFraction,M3norm,M3,charTFind,...
+    minInteractionsA,minInteractionsI,nCompA,nCompI,itnum,figOpt);
+
 toc
