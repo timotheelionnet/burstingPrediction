@@ -1,6 +1,23 @@
 function [bgData,tfList,charTFs] = pruneInteractionList(bgData,tfDB,burstingData)
+% From a list of genome-wide interaction pairs (bgData), 
+% this function keeps only interactions where at least one partner is a TF
 
-%% keep only interactions where at least one partner is a TF
+%%%%% INPUT: 
+% bgData is a <number of interactions> x 2 cell array listing gene
+            % symbols involved in each interaction (pairs can be redundant)
+% tfDB is a MATLAB table containing TFs as rows and their features as columns            
+        % the only column used here is 'HGNCSymbol'
+% burstingData is a MATLAB table with columns TFnames, activity, intensity (CRISPRburst results)  
+        % the only column used here is 'TFnames'
+        
+%%%%% OUTPUT:
+% bgData is the pruned list of interactions
+% tfList is the list of gene symbols defined as the union of: 
+    % all TF gene symbols in tfDB, and 
+    % all gene symbols for experimentally characterized genes defined in burstingData
+% charTFs is the list of all gene symbols for experimentally characterized genes defined in burstingData
+    
+%%
 
 % list of names of characterized TFs
 charTFs = unique(burstingData.TFnames(:));
