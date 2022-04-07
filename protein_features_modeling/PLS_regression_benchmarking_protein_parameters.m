@@ -59,18 +59,14 @@ if figOpt == 1 || 2
     errorbar(trainingFraction,mean(PLScorr_afpro),std(PLScorr_afpro)/sqrt(length(PLScorr_afpro)),'DisplayName','Active Fraction'); hold on
     errorbar(trainingFraction,mean(PLScorr_intpro),std(PLScorr_intpro)/sqrt(length(PLScorr_intpro)),'DisplayName','Intensity');
     xlabel('% of data used for training');
-    ylabel('mean PCC over 100 iterations');
+    ylabel(['mean PCC over ' num2str(itnum) ' iterations']);
     title("PLS protein");
-    legend
-    pbaspect([1 1 1])
-    box off
+    legend(location = 'best'); pbaspect([1 1 1]); box off
     figure;
     errorbar(trainingFraction,mean(PLSerr_afpro),std(PLSerr_afpro)/sqrt(length(PLSerr_afpro)),'DisplayName','Active Fraction'); hold on
     errorbar(trainingFraction,mean(PLSerr_intpro),std(PLSerr_intpro)/sqrt(length(PLSerr_intpro)),'DisplayName','Intensity');
     xlabel('% of data used for training');
-    ylabel('MSE over 100 iterations');
+    ylabel(['MSE over ' num2str(itnum) ' iterations']);
     title("PLS protein");
-    legend
-    pbaspect([1 1 1])
-    box off
+    legend(location = 'best'); pbaspect([1 1 1]); box off
 end
