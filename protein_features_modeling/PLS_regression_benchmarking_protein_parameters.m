@@ -29,8 +29,8 @@ for i = 1:itnum
         predValidTrainErrAct = immse(burstingDataParameters.activity(validIndex), predValidScoreAF);
 
         if figOpt == 1
-            figure; scatter(burstingData2.activity(validIndex,1),predValidScoreAF); hold on;
-            labelpoints(burstingData2.activity(validIndex,1),predValidScoreAF,parametersNames(validIndex),'N',0.1)
+            figure; scatter(burstingDataParameters.activity(validIndex,1),predValidScoreAF); hold on;
+            labelpoints(burstingDataParameters.activity(validIndex,1),predValidScoreAF,parametersNames(validIndex),'N',0.1)
             xlabel('True Activity Effect')
             ylabel('Predicted Activity Effect')
             title(['Predicted vs True Values - Activity corr = ' num2str(predValidTraincorrAct)])
@@ -41,8 +41,8 @@ for i = 1:itnum
         predValidTrainErrInt = immse(burstingDataParameters.intensity(validIndex), predValidScoreInt);
 
         if figOpt == 1
-            figure; scatter(burstingData2.intensity(validIndex,1),predValidScoreInt); hold on;
-            labelpoints(burstingData2.intensity(validIndex,1),predValidScoreInt,parametersNames(validIndex),'N',0.1)
+            figure; scatter(burstingDataParameters.intensity(validIndex,1),predValidScoreInt); hold on;
+            labelpoints(burstingDataParameters.intensity(validIndex,1),predValidScoreInt,parametersNames(validIndex),'N',0.1)
             xlabel('True Intensity Effect')
             ylabel('Predicted Intensity Effect')
             title(['Predicted vs True Values - Intensity corr = ' num2str(predValidTraincorrInt)])
