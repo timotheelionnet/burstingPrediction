@@ -24,6 +24,7 @@ PLScorr_af = zeros(itnum,numel(trainingFraction));
 PLScorr_int = zeros(itnum,numel(trainingFraction));
 PLSerr_af = zeros(itnum,numel(trainingFraction));
 PLSerr_int = zeros(itnum,numel(trainingFraction));
+inlierCollect = zeros(height(burstingData2),itnum);
 
 tic
 for i = 1:itnum
