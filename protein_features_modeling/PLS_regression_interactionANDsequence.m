@@ -9,17 +9,17 @@ parameters = table2array(allTF_lcr_table(:,2:end));
 parametersNorm = normalize(normalize(parameters,2));
 parametersNorm(isnan(parametersNorm)) = 0;
 SubAct = rp_act(2,2:end)<0.05;
-parametersSubAct = parametersNorm(charTFind,SubAct');
+parametersSubAct = parametersNorm(:,SubAct');
 SubInt = rp_int(2,2:end)<0.05;
-parametersSubInt = parametersNorm(charTFind,SubInt');
+parametersSubInt = parametersNorm(:,SubInt');
 %%
 figOpt = 2;
 A=270;
 I=40;
 M3act = M3norm(:,sum(M3)>=A);
 M3int = M3norm(:,sum(M3)>=I);
-ActData = [M3act(charTFind,:),parametersSubAct];
-IntData = [M3int(charTFind,:),parametersSubInt];
+ActData = [M3act(charTFind,:),parametersSubAct(charTFind,:)];
+IntData = [M3int(charTFind,:),parametersSubInt(charTFind,:)];
 
 ncomp = [2,3];
 itnum = 100;

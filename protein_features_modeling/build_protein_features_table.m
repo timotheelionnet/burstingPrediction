@@ -14,9 +14,11 @@ allTF_lcr_table.Properties.VariableNames = {'TFname','D','K','I','Y','G','R','M'
     'L','W','P','F','H','T','N','A','C','V','S','Q','LCR_cum_length','LCR_count'};
 for i = 1:numel(allTFprotein_names)
     if strmatch(allTFprotein_names(i), lcr_table.Var1) ~= 0
-        allTF_lcr_table(i,2:21) = array2table(mean(table2array(lcr_table(strmatch(allTFprotein_names(i), lcr_table.Var1),2:21)),1));
-        allTF_lcr_table(i,22) = array2table(sum(table2array(lcr_table(strmatch(allTFprotein_names(i), lcr_table.Var1),24))));
-        allTF_lcr_table(i,23) = array2table(max(table2array(lcr_table(strmatch(allTFprotein_names(i), lcr_table.Var1),25))));
+        allTF_lcr_table(i,2:21) = array2table(mean(table2array(lcr_table(strmatch(string(allTFprotein_names(i))+'_', lcr_table.Var1),2:21)),1));
+        allTF_lcr_table(i,22) = array2table(sum(table2array(lcr_table(strmatch(string(allTFprotein_names(i))+'_', lcr_table.Var1),24))));
+        allTF_lcr_table(i,23) = array2table(max(table2array(lcr_table(strmatch(string(allTFprotein_names(i))+'_', lcr_table.Var1),25))));
+    else
+        allTF_lcr_table(i,2:23) = {0};
     end
 end
 %% Find signficant correlations between predicted effects and protein features with FDR correction
@@ -32,10 +34,15 @@ for i = 2:width(allTF_lcr_table)
 end
 rp_int(3,:) = mafdr(rp_int(2,:));
 rp_int(4,:) = rp_int(2,:)<rp_int(3,:);
-%% Plot signficant correlations after FDR correction
-figure; scatter(table2array(allTF_lcr_table(:,3)),RollingScores{5,2}(:,1))
-ylim([0 3.5]); ylabel('Predicted Active Fraction Effect'); xlabel('Frequency of Lysine per TF');
-figure; scatter(table2array(allTF_lcr_table(:,22)),RollingScores{5,2}(:,1))
-ylim([0 3.5]); ylabel('Predicted Active Fraction Effect'); xlabel('Cumulative length of LCR segments per TF');
-figure; scatter(table2array(allTF_lcr_table(:,23)),RollingScores{5,2}(:,1))
-ylim([0 3.5]); ylabel('Predicted Active Fraction Effect'); xlabel('Number of LCR segments per TF');
+%% Plot some correlations with amino acids
+figure; scatter(table2array(allTF_lcr_table(:,6)),RollingScores{5,2}(:,2))
+ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Glycine per TF');
+figure; scatter(table2array(allTF_lcr_table(:,10)),RollingScores{5,2}(:,2))
+ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Lysine per TF');
+figure; scatter(table2array(allTF_lcr_table(:,20)),RollingScores{5,2}(:,2))
+ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Serine per TF');
+% Plot some correlations with LCR features
+figure; scatter(table2array(allTF_lcr_table(:,22)),RollingScores{5,2}(:,2))
+ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Cumulative length of LCR segments per TF');
+figure; scatter(table2array(allTF_lcr_table(:,23)),RollingScores{5,2}(:,2))
+ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Number of LCR segments per TF');
