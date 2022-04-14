@@ -1,4 +1,8 @@
 figOpt = 2;
+if exist('parameters','var') == 0
+    PLS_regression_interactionANDsequence; close all
+end
+%%
 parametersNorm = normalize(normalize(parameters,2));
 parametersNorm(isnan(parametersNorm)) = 0;
 
@@ -7,11 +11,11 @@ rp_int = zeros(width(allTF_lcr_table),2)';
 for i = 2:width(allTF_lcr_table)
     [rp_act(1,i),rp_act(2,i)] = corr(burstingData2.activity,table2array(allTF_lcr_table(charTFind,i)));
 end
-rp_act(3,:) = rp_act(2,:)<0.1;
+rp_act(3,:) = abs(rp_act(1,:))>0.2;
 for i = 2:width(allTF_lcr_table)
     [rp_int(1,i),rp_int(2,i)] = corr(burstingData2.intensity,table2array(allTF_lcr_table(charTFind,i)));
 end
-rp_int(3,:) = rp_int(2,:)<0.1;
+rp_int(3,:) = abs(rp_int(1,:))>0.2;
 %%
 parameters = table2array(allTF_lcr_table(charTFind,2:end));
 parametersNorm = normalize(normalize(parameters,2));
@@ -23,7 +27,7 @@ parametersSubInt = parametersNorm(:,SubInt');
 
 ncomp = [2,3];
 tic
-itnum = 100;
+itnum = 1000;
 trainingFraction = 10:10:80;
 PLScorr_afpro = zeros(itnum,numel(trainingFraction));
 PLSerr_afpro = zeros(itnum,numel(trainingFraction));

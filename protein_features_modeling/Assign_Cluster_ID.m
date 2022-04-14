@@ -22,7 +22,7 @@ p_AFvsX = zeros(2,width(allTF_lcr_table));
 for m = 1:length(C_names)
     for j = 2:width(allTF_lcr_table)
         [h_AFvsX(m,j),p_AFvsX(m,j)] = ttest2(table2array(allTF_lcr_table(find(clusterID == 1),j)),...
-            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/(width(allTF_lcr_table)-1));
+            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/220);
     end
 end
 h_IntVsX = zeros(2,width(allTF_lcr_table));
@@ -30,7 +30,7 @@ p_IntVsX = zeros(2,width(allTF_lcr_table));
 for m = 1:length(C_names)
     for j = 2:width(allTF_lcr_table)
         [h_IntVsX(m,j),p_IntVsX(m,j)] = ttest2(table2array(allTF_lcr_table(find(clusterID == 2),j)),...
-            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/(width(allTF_lcr_table)-1));
+            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/220);
     end
 end
 h_HMvsX = zeros(2,width(allTF_lcr_table));
@@ -38,7 +38,7 @@ p_HMvsX = zeros(2,width(allTF_lcr_table));
 for m = 1:numel(C_names)
     for j = 2:width(allTF_lcr_table)
         [h_HMvsX(m,j),p_HMvsX(m,j)] = ttest2(table2array(allTF_lcr_table(find(clusterID == 3),j)),...
-            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/(width(allTF_lcr_table)-1));
+            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/220);
     end
 end
 h_NonVsX = zeros(2,width(allTF_lcr_table));
@@ -46,7 +46,7 @@ p_NonVsX = zeros(2,width(allTF_lcr_table));
 for m = 1:numel(C_names)
     for j = 2:width(allTF_lcr_table)
         [h_NonVsX(m,j),p_NonVsX(m,j)] = ttest2(table2array(allTF_lcr_table(find(clusterID == 4),j)),...
-            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/(width(allTF_lcr_table)-1));
+            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/220);
     end
 end
 h_LMvsX = zeros(2,width(allTF_lcr_table));
@@ -54,7 +54,7 @@ p_LMvsX = zeros(2,width(allTF_lcr_table));
 for m = 1:numel(C_names)
     for j = 2:width(allTF_lcr_table)
         [h_LMvsX(m,j),p_LMvsX(m,j)] = ttest2(table2array(allTF_lcr_table(find(clusterID == 5),j)),...
-            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/(width(allTF_lcr_table)-1));
+            table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/220);
     end
 end
 %% Create bloxplots for features with sig differences, if plot flag is 1

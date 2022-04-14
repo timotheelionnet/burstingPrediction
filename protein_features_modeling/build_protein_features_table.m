@@ -1,3 +1,4 @@
+figOpt = 0;
 %% Run biogridScipt if needed
 if exist('RollingScores','var') == 0
     biogridScript; close all
@@ -35,6 +36,7 @@ end
 rp_int(3,:) = rp_int(2,:)<0.05/(length(rp_int')-1);
 sigCorr_int = allTF_lcr_table.Properties.VariableNames(rp_int(3,:)>0);
 %% Plot some significant correlations with amino acids
+if figOpt == 1
 figure; scatter(allTF_lcr_table.Q,RollingScores{5,2}(:,1)); lsline;
 ylim([0 3.5]); ylabel('Predicted Active Fraction Effect'); xlabel('Frequency of Glutamine per TF');
 
@@ -47,3 +49,4 @@ ylim([0.5 2]); ylabel('Predicted Active Fraction Effect'); xlabel(allTF_lcr_tabl
 
 figure; scatter(allTF_lcr_table.("LCR cum length"),RollingScores{5,2}(:,2)); lsline;
 ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel(allTF_lcr_table.Properties.VariableNames(22) + " per TF");
+end

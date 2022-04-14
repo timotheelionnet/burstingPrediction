@@ -10,11 +10,11 @@ rp_int = zeros(width(allTF_lcr_table),2)';
 for i = 2:width(allTF_lcr_table)
     [rp_act(1,i),rp_act(2,i)] = corr(burstingData2.activity,table2array(allTF_lcr_table(charTFind,i)));
 end
-rp_act(3,:) = rp_act(2,:)<0.05/(length(rp_act')-1);
+rp_act(3,:) = abs(rp_act(2,:))>0.2;
 for i = 2:width(allTF_lcr_table)
     [rp_int(1,i),rp_int(2,i)] = corr(burstingData2.intensity,table2array(allTF_lcr_table(charTFind,i)));
 end
-rp_int(3,:) = rp_int(2,:)<0.05/(length(rp_int')-1);
+rp_int(3,:) = abs(rp_int(2,:))>0.2;
 %%
 parameters = table2array(allTF_lcr_table(:,2:end));
 parametersNorm = normalize(normalize(parameters,2));
