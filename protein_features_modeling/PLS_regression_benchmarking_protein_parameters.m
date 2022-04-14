@@ -5,18 +5,23 @@ parametersNorm(isnan(parametersNorm)) = 0;
 rp_act = zeros(width(allTF_lcr_table),2)';
 rp_int = zeros(width(allTF_lcr_table),2)';
 for i = 2:width(allTF_lcr_table)
-    [rp_act(1,i),rp_act(2,i)] = corr(RollingScores{5,2}(:,1),table2array(allTF_lcr_table(:,i)));
+    [rp_act(1,i),rp_act(2,i)] = corr(burstingData2.activity,table2array(allTF_lcr_table(charTFind,i)));
 end
-SubAct = rp_act(2,2:end)<0.05;
-parametersSubAct = parametersNorm(charTFind,SubAct');
-
+rp_act(3,:) = rp_act(2,:)<0.1;
 for i = 2:width(allTF_lcr_table)
-    [rp_int(1,i),rp_int(2,i)] = corr(RollingScores{5,2}(:,2),table2array(allTF_lcr_table(:,i)));
+    [rp_int(1,i),rp_int(2,i)] = corr(burstingData2.intensity,table2array(allTF_lcr_table(charTFind,i)));
 end
-SubInt = rp_int(2,2:end)<0.05;
-parametersSubInt = parametersNorm(charTFind,SubInt');
+rp_int(3,:) = rp_int(2,:)<0.1;
+%%
+parameters = table2array(allTF_lcr_table(charTFind,2:end));
+parametersNorm = normalize(normalize(parameters,2));
+parametersNorm(isnan(parametersNorm)) = 0;
+SubAct = rp_act(3,2:end)>0;
+parametersSubAct = parametersNorm(:,SubAct');
+SubInt = rp_int(3,2:end)>0;
+parametersSubInt = parametersNorm(:,SubInt');
 
-ncomp = [3,3];
+ncomp = [2,3];
 tic
 itnum = 100;
 trainingFraction = 10:10:80;

@@ -33,7 +33,7 @@ ActData = [M3act(charTFind,:),parametersSubAct(charTFind,:)];
 IntData = [M3int(charTFind,:),parametersSubInt(charTFind,:)];
 
 ncomp = [2,3];
-itnum = 1000;
+itnum = 100;
 trainingFraction = 10:10:80;
 
 PLScorr_af = zeros(itnum,numel(trainingFraction));
