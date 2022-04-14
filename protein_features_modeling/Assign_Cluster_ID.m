@@ -1,7 +1,7 @@
 %using the predicted AF and Int scores for all TFs, assign each TF to a
 %cluster using the kmeans defined centroids and check for sig differences
 %between clusters in protein features
-
+figOpt = 1;
 %% Initialize necessary data from BioGRID and LCR table
 C = [1.62, 1.05; 1.02, 1.37; 2.7, 1.4; 0.99, 0.99; 1.6, 1.56];
 C_names = {'AF','Int','High multi','Non','Low multi'};
@@ -57,11 +57,14 @@ for m = 1:numel(C_names)
             table2array(allTF_lcr_table(find(clusterID == m),j)),'alpha',0.05/(width(allTF_lcr_table)-1));
     end
 end
-%% Example boxplot
-figure; boxplot(allTF_lcr_table.("LCR cum length"),clusterID,'Notch','on')
-ylabel(allTF_lcr_table.Properties.VariableNames(22) + " per TF")
-set(gca, 'xtick', 1:5); set(gca,'xticklabel',C_names)
-
-figure; boxplot(allTF_lcr_table.("LCR count"),clusterID,'Notch','on')
-ylabel(allTF_lcr_table.Properties.VariableNames(23) + " per TF")
-set(gca, 'xtick', 1:5); set(gca,'xticklabel',C_names)
+%% Create bloxplots for features with sig differences, if plot flag is 1
+if figOpt == 1
+    for sigNum = 1:width(allTF_lcr_table)
+        temp = sum(vertcat(h_AFvsX,h_IntVsX,h_HMvsX, h_NonVsX, h_LMvsX))>0;
+        if temp(sigNum) == 1
+            figure; boxplot(table2array(allTF_lcr_table(:,sigNum)),clusterID,'Notch','on')
+            ylabel(allTF_lcr_table.Properties.VariableNames(sigNum) + " per TF")
+            set(gca, 'xtick', 1:5); set(gca,'xticklabel',C_names)
+        end
+    end
+end
