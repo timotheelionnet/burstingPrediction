@@ -1,6 +1,6 @@
 figOpt = 0;
 
-ransacOpt = 1;
+ransacOpt = 0;
 if ransacOpt == 1
     effects = table2array(burstingData2(:,2:3));
     sampleSize = 2; % number of points to sample per trial
@@ -12,11 +12,11 @@ else
     ncomp = [4,5];
 end
 
-itnum = 100;
+itnum = 1000;
 A=253;
 I=40;
-InteractionIndexAct = find(sum(M3)>=A);
-InteractionIndexInt = find(sum(M3)>=I);
+InteractionIndexAct = sum(M3)>=A;
+InteractionIndexInt = sum(M3)>=I;
 M3act = M3norm(:,InteractionIndexAct);
 M3int = M3norm(:,InteractionIndexInt);
 trainingFraction = 10:10:80;
@@ -34,7 +34,7 @@ for i = 1:itnum
                 sampleSize,maxDistance);
             outlierIdx = find(inlierIdx == 0);
         else
-            inlierIdx = 1:73;
+            inlierIdx = 1:height(burstingData2sub);
         end
         burstingData2sub = burstingData2(inlierIdx,:);
         nTraining = round(round(height(burstingData2sub)) * trainingFraction(j)/100);

@@ -21,28 +21,29 @@ for i = 1:numel(allTFprotein_names)
         allTF_lcr_table(i,2:23) = {0};
     end
 end
-%% Find signficant correlations between predicted effects and protein features with FDR correction
+%% Find signficant correlations between predicted effects and protein features with FDR correction (alpha / # tests)
 rp_act = zeros(width(allTF_lcr_table),2)';
 rp_int = zeros(width(allTF_lcr_table),2)';
 for i = 2:width(allTF_lcr_table)
     [rp_act(1,i),rp_act(2,i)] = corr(RollingScores{5,2}(:,1),table2array(allTF_lcr_table(:,i)));
 end
-rp_act(3,:) = mafdr(rp_act(2,:));
-rp_act(4,:) = rp_act(2,:)<rp_act(3,:);
+rp_act(3,:) = rp_act(2,:)<0.05/(length(rp_act')-1);
+sigCorr_act = allTF_lcr_table.Properties.VariableNames(rp_act(3,:)>0);
 for i = 2:width(allTF_lcr_table)
     [rp_int(1,i),rp_int(2,i)] = corr(RollingScores{5,2}(:,2),table2array(allTF_lcr_table(:,i)));
 end
-rp_int(3,:) = mafdr(rp_int(2,:));
-rp_int(4,:) = rp_int(2,:)<rp_int(3,:);
-%% Plot some correlations with amino acids
-figure; scatter(table2array(allTF_lcr_table(:,6)),RollingScores{5,2}(:,2))
+rp_int(3,:) = rp_int(2,:)<0.05/(length(rp_int')-1);
+sigCorr_int = allTF_lcr_table.Properties.VariableNames(rp_int(3,:)>0);
+%% Plot some significant correlations with amino acids
+figure; scatter(allTF_lcr_table.Q,RollingScores{5,2}(:,1)); lsline;
+ylim([0 3.5]); ylabel('Predicted Active Fraction Effect'); xlabel('Frequency of Glutamine per TF');
+
+figure; scatter(allTF_lcr_table.G,RollingScores{5,2}(:,2)); lsline;
 ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Glycine per TF');
-figure; scatter(table2array(allTF_lcr_table(:,10)),RollingScores{5,2}(:,2))
-ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Lysine per TF');
-figure; scatter(table2array(allTF_lcr_table(:,20)),RollingScores{5,2}(:,2))
-ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Serine per TF');
-% Plot some correlations with LCR features
-figure; scatter(table2array(allTF_lcr_table(:,22)),RollingScores{5,2}(:,2))
+
+% Plot some significant correlations with LCR features
+figure; scatter(allTF_lcr_table.LCR_count,RollingScores{5,2}(:,2)); lsline;
+ylim([0.5 2]); ylabel('Predicted Active Fraction Effect'); xlabel('Number of LCR segments per TF');
+
+figure; scatter(allTF_lcr_table.LCR_cum_length,RollingScores{5,2}(:,2)); lsline;
 ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Cumulative length of LCR segments per TF');
-figure; scatter(table2array(allTF_lcr_table(:,23)),RollingScores{5,2}(:,2))
-ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Number of LCR segments per TF');
