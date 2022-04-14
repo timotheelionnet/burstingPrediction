@@ -9,7 +9,7 @@ if exist('RollingScores','var') == 0
     biogridScript; close all
 end
 if exist('allTF_lcr_table','var') == 0
-    biogridScript; close all
+    build_protein_features_table; close all
 end
 %% Find nearest centroid using euclidean distance
 clusterID = zeros(length(tfList2),1);
@@ -58,10 +58,10 @@ for m = 1:numel(C_names)
     end
 end
 %% Example boxplot
-figure; boxplot(allTF_lcr_table.LCR_cum_length,clusterID,'Notch','on')
-ylabel('Cumulative length of LCRs per TF')
+figure; boxplot(allTF_lcr_table.("LCR cum length"),clusterID,'Notch','on')
+ylabel(allTF_lcr_table.Properties.VariableNames(22) + " per TF")
 set(gca, 'xtick', 1:5); set(gca,'xticklabel',C_names)
 
-figure; boxplot(allTF_lcr_table.LCR_count,clusterID,'Notch','on')
-ylabel('Number of LCRs per TF')
+figure; boxplot(allTF_lcr_table.("LCR count"),clusterID,'Notch','on')
+ylabel(allTF_lcr_table.Properties.VariableNames(23) + " per TF")
 set(gca, 'xtick', 1:5); set(gca,'xticklabel',C_names)

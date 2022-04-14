@@ -11,7 +11,7 @@ lcr_table  = readtable(lcr_table_FileName);
 allTF_lcr_table(:,1) = table(tfList2);
 allTF_lcr_table(:,2:23) = {0};
 allTF_lcr_table.Properties.VariableNames = {'TFname','D','K','I','Y','G','R','M','E',...
-    'L','W','P','F','H','T','N','A','C','V','S','Q','LCR_cum_length','LCR_count'};
+    'L','W','P','F','H','T','N','A','C','V','S','Q','LCR cum length','LCR count'};
 for i = 1:numel(allTFprotein_names)
     if strmatch(allTFprotein_names(i), lcr_table.Var1) ~= 0
         allTF_lcr_table(i,2:21) = array2table(mean(table2array(lcr_table(strmatch(string(allTFprotein_names(i))+'_', lcr_table.Var1),2:21)),1));
@@ -42,8 +42,8 @@ figure; scatter(allTF_lcr_table.G,RollingScores{5,2}(:,2)); lsline;
 ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Frequency of Glycine per TF');
 
 % Plot some significant correlations with LCR features
-figure; scatter(allTF_lcr_table.LCR_count,RollingScores{5,2}(:,2)); lsline;
-ylim([0.5 2]); ylabel('Predicted Active Fraction Effect'); xlabel('Number of LCR segments per TF');
+figure; scatter(allTF_lcr_table.("LCR count"),RollingScores{5,2}(:,2)); lsline;
+ylim([0.5 2]); ylabel('Predicted Active Fraction Effect'); xlabel(allTF_lcr_table.Properties.VariableNames(23) + " per TF");
 
-figure; scatter(allTF_lcr_table.LCR_cum_length,RollingScores{5,2}(:,2)); lsline;
-ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel('Cumulative length of LCR segments per TF');
+figure; scatter(allTF_lcr_table.("LCR cum length"),RollingScores{5,2}(:,2)); lsline;
+ylim([0.5 2]); ylabel('Predicted Intensity Effect'); xlabel(allTF_lcr_table.Properties.VariableNames(22) + " per TF");
