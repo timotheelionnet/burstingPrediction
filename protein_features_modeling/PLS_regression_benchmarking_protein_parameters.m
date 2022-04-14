@@ -91,7 +91,7 @@ if figOpt == 1 || 2
     errorbar(trainingFraction,mean(PLScorr_intpro),std(PLScorr_intpro)/sqrt(length(PLScorr_intpro)),'DisplayName','Intensity');
     xlabel('% of data used for training');
     ylabel(['mean PCC over ' num2str(itnum) ' iterations']);
-    title("repressors in validation only");
+    title("PLS protein features only");
     legend(location = 'best'); pbaspect([1 1 1]); box off
 
     figure;
@@ -99,7 +99,7 @@ if figOpt == 1 || 2
     errorbar(trainingFraction,mean(PLSerr_intpro),std(PLSerr_intpro)/sqrt(length(PLSerr_intpro)),'DisplayName','Intensity');
     xlabel('% of data used for training');
     ylabel(['MSE over ' num2str(itnum) ' iterations']);
-    title("repressors in validation only");
+    title("PLS protein features only");
     legend(location = 'best'); pbaspect([1 1 1]); box off
 
     %figure;
