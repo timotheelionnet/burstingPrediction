@@ -1,36 +1,34 @@
+%% updated may 18 to include IDR data from Holehouse
 if exist('RollingScores','var') == 0
     biogridScript; close all
 end
-if exist('lcr_table','var') == 0
-    build_protein_features_table; close all
-end
-%%
-rp_act = zeros(width(allTF_lcr_table),2)';
-rp_int = zeros(width(allTF_lcr_table),2)';
-for i = 2:width(allTF_lcr_table)
-    [rp_act(1,i),rp_act(2,i)] = corr(burstingData2.activity,table2array(allTF_lcr_table(charTFind,i)));
-end
-rp_act(3,:) = abs(rp_act(2,:))>0.2;
-for i = 2:width(allTF_lcr_table)
-    [rp_int(1,i),rp_int(2,i)] = corr(burstingData2.intensity,table2array(allTF_lcr_table(charTFind,i)));
-end
-rp_int(3,:) = abs(rp_int(2,:))>0.2;
-%%
-parameters = table2array(allTF_lcr_table(:,2:end));
-parametersNorm = normalize(normalize(parameters,2));
-parametersNorm(isnan(parametersNorm)) = 0;
-SubAct = rp_act(3,2:end)>0;
-parametersSubAct = parametersNorm(:,SubAct');
-SubInt = rp_int(3,2:end)>0;
-parametersSubInt = parametersNorm(:,SubInt');
-%%
+IDRdataFileName = 'norm_parameters - FullProtein.csv';
+IDRfeatures = readtable(IDRdataFileName);
 figOpt = 2;
+%%
+rp_act = zeros(width(IDRfeatures)-3,2)';
+rp_int = zeros(width(IDRfeatures)-3,2)';
+
+for i = 1:width(IDRfeatures)-3
+    [rp_act(1,i),rp_act(2,i)] = corr(IDRfeatures.activity,table2array(IDRfeatures(:,i+3)));
+end
+for i = 1:width(IDRfeatures)-3
+    [rp_int(1,i),rp_int(2,i)] = corr(IDRfeatures.intensity,table2array(IDRfeatures(:,i+3)));
+end
+rp_act(3,:) = rp_act(1,:)>0.0;
+rp_int(3,:) = rp_int(1,:)>0.0;
+%%
+SubAct = logical([0,0,0,rp_act(3,:)>0]);
+parametersSubAct = IDRfeatures(:,SubAct');
+SubInt = logical([0,0,0,rp_int(3,:)>0]);
+parametersSubInt = IDRfeatures(:,SubInt');
+%%
 A=270;
 I=40;
 M3act = M3norm(:,sum(M3)>=A);
 M3int = M3norm(:,sum(M3)>=I);
-ActData = [M3act(charTFind,:),parametersSubAct(charTFind,:)];
-IntData = [M3int(charTFind,:),parametersSubInt(charTFind,:)];
+ActData = [M3act(charTFind,:),table2array(parametersSubAct)];
+IntData = [M3int(charTFind,:),table2array(parametersSubInt)];
 
 ncomp = [2,3];
 itnum = 100;
@@ -44,11 +42,11 @@ tic
 %%
 for i = 1:itnum
     for j = 1:numel(trainingFraction)
-        nTraining = round(round(height(burstingData2)) * trainingFraction(j)/100); 
+        nTraining = round(round(height(parametersSubAct)) * trainingFraction(j)/100);
         %keepIndex = [4,6:73];
-        trainingIndex = randperm(height(burstingData2),nTraining);
+        trainingIndex = randperm(height(parametersSubAct),nTraining);
         %trainingIndex = trainingIndex(ismember(trainingIndex,keepIndex));
-        validIndex = setdiff(1:height(burstingData2),trainingIndex);
+        validIndex = setdiff(1:height(parametersSubAct),trainingIndex);
         %validIndex = validIndex(ismember(validIndex,keepIndex));
         nValid = length(validIndex);
         %% Train PLS model for AF effect
